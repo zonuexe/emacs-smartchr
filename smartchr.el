@@ -50,7 +50,7 @@
   :group 'smartchr)
 
 (defcustom smartchr-template-cursor-re (eval-when-compile (rx "`!!'"))
-  "A regexp pattern that searches for the position where the cursor moves when inserting."
+  "A regexp that searches for the position where the cursor moves when inserting."
   :type 'regexp
   :group 'smartchr)
 
