@@ -29,59 +29,87 @@
 ;; These tests depends on ert-expectation package.
 
 ;;; Code:
-(require 'ert-expectations)
+(require 'smartchr)
+(require 'ert)
+(require 'cl-lib)
 
-(expectations
-  (desc "smartchr-parse smartchr-template-cursor-re")
-  (expect "{  }"
+(ert-deftest smartchr-test-1 nil
+  (should
+   (string=
+    "{  }"
     (with-temp-buffer
-      (let ((smartchr-struct-cursor-re  "`!!'"))
-        (let ((struct (smartchr-parse "{ `!!' }")))
-          (assert (smartchr-struct-p struct))
-          (funcall (smartchr-struct-insert-fn struct))
-          (buffer-string)))))
+      (let ((smartchr-struct-cursor-re "`!!'")
+            (struct (smartchr-parse "{ `!!' }")))
+        (cl-assert (smartchr-struct-p struct))
+        (funcall (smartchr-struct-insert-fn struct))
+        (buffer-string))))))
 
-  (expect ""
+(ert-deftest smartchr-test-2 nil
+  (should
+   (string=
+    "{  }"
     (with-temp-buffer
-      (let ((smartchr-struct-cursor-re  "`!!'"))
-        (let ((struct (smartchr-parse "{ `!!' }")))
-          (assert (smartchr-struct-p struct))
-          (funcall (smartchr-struct-insert-fn struct))
-          (funcall (smartchr-struct-cleanup-fn struct))
-          (buffer-string)))))
+      (let ((smartchr-struct-cursor-re "`!!'")
+            (struct (smartchr-parse "{ `!!' }")))
+        (cl-assert (smartchr-struct-p struct))
+        (funcall (smartchr-struct-insert-fn struct))
+        (buffer-string))))))
 
-  (desc "template allow function")
-  (expect t
+(ert-deftest smartchr-test-3 nil
+  (should
+   (string=
+    ""
     (with-temp-buffer
-      (let ((smartchr-struct-cursor-re  "`!!'")
-            (fn-called nil))
-        (let ((struct (smartchr-parse (lambda () (setq fn-called t)))))
-          (assert (smartchr-struct-p struct))
-          (funcall (smartchr-struct-insert-fn struct))
-          fn-called))))
+      (let ((smartchr-struct-cursor-re "`!!'")
+            (struct (smartchr-parse "{ `!!' }")))
+        (cl-assert (smartchr-struct-p struct))
+        (funcall (smartchr-struct-insert-fn struct))
+        (funcall (smartchr-struct-cleanup-fn struct))
+        (buffer-string))))))
 
-  (expect "hi"
+;; template allow function
+(ert-deftest smartchr-test-4 nil
+  (should
+   (eq
+    t
     (with-temp-buffer
-      (let ((smartchr-struct-cursor-re  "`!!'"))
-        (let ((struct (smartchr-parse (lambda () "hi"))))
-          (assert (smartchr-struct-p struct))
-          (funcall (smartchr-struct-insert-fn struct))
-          (buffer-string)))))
+      (let ((smartchr-struct-cursor-re "`!!'")
+            (fn-called nil)
+            (struct (smartchr-parse (lambda nil (setq fn-called t)))))
+        (cl-assert (smartchr-struct-p struct))
+        (funcall (smartchr-struct-insert-fn struct))
+        fn-called)))))
 
-  (desc "smartchr-parse pass argument if argument is already struct")
-  (expect t
+(ert-deftest smartchr-test-5 nil
+  (should
+   (string=
+    "hi"
+    (with-temp-buffer
+      (let ((smartchr-struct-cursor-re "`!!'")
+            (struct (smartchr-parse (lambda nil "hi"))))
+        (cl-assert (smartchr-struct-p struct))
+        (funcall (smartchr-struct-insert-fn struct))
+        (buffer-string))))))
+
+;; smartchr-parse pass argument if argument is already struct
+(ert-deftest smartchr-test-6 nil
+  (should
+   (eq
+    t
     (smartchr-struct-p
      (smartchr-parse
-      (smartchr-make-struct
-       :cleanup-fn (lambda ())
-       :insert-fn (lambda ())))))
+      (smartchr-make-struct :cleanup-fn (lambda nil)
+                    :insert-fn (lambda nil)))))))
 
-  (desc "smartchr-parse rest args")
-  (with-temp-buffer
-    (let ((smartchr-struct-cursor-re  "`!!'"))
-      (let ((cmd (smartchr "a" "b"))
-            (do-nothing (lambda () (interactive))))
+;; smartchr-parse rest args
+(ert-deftest smartchr-test-6 nil
+  (should
+   (string=
+    "a"
+    (with-temp-buffer
+      (let ((smartchr-struct-cursor-re "`!!'")
+            (cmd (smartchr "a" "b")))
         (call-interactively cmd)
-        (buffer-string)))))
+        (buffer-string))))))
 
 ;;; smartchr-test.el ends here
