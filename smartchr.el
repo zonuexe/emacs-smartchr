@@ -1,13 +1,12 @@
-;;; smartchr.el ---  emacs version of smartchr.vim  -*- lexical-binding: t -*-
+;;; smartchr.el --- Support input several candidates with a single key -*- lexical-binding: t -*-
 
 ;; Copyright (c) 2009 by IMAKADO.
 
 ;; Author: IMAKADO <ken.imakado@gmail.com>
 ;; URL: https://github.com/imakado/emacs-smartchr
 ;; blog: http://d.hatena.ne.jp/IMAKADO (japanese)
-;; Prefix: smartchr
 ;; Package-Requires: ((emacs "24.3"))
-;; LICENSE: GPL-2.0-or-later
+;; License: GPL-2.0-or-later
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,21 +23,23 @@
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
-
 ;;; Thanks to k1LoW for original idea.
 
 ;;; Commentary:
 
-;; (global-set-key (kbd "=") (smartchr '(" = " " == " " === ")))
-
-;; substitute `!!' with cursor
-;; (global-set-key (kbd "{")
-;;              (smartchr '("{ `!!' }" "{ \"`!!'\" }" "{")))
-
-
-;;; TODO:
-;; Error with head version of auto-complete.el
-;; reported by k1LoW
+;; ## Usage
+;;
+;; smartchr generates an interactive closure, so bind it to keymap.
+;;
+;;     (global-set-key (kbd "=") (smartchr '(" = " " == " " === ")))
+;;     (define-key python-mode-map (kbd "=") (smartchr '(" = " " == ")))
+;;
+;; Substitute `!!' with cursor.
+;;
+;;     (global-set-key (kbd "{")
+;;                     (smartchr '("{ `!!' }" "{ \"`!!'\" }" "{")))
+;;
+;; The cursor symbol can be changed with the `smartchr-template-cursor-re' variable.
 
 ;;; Code:
 (eval-when-compile
