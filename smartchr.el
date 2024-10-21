@@ -96,8 +96,7 @@
         str-or-struct)
        ((stringp str-or-struct)
         (smartchr-parse str-or-struct))
-       (t
-        (smartchr-make-struct
+       ((smartchr-make-struct
          :cleanup-fn (lambda ())
          :insert-fn (lambda ()))))))
    ((string-match smartchr-template-cursor-re template)
@@ -110,8 +109,7 @@
          :insert-fn (lambda ()
                       (insert pre)
                       (save-excursion (insert post)))))))
-   (t
-    (let ((template template))
+   ((let ((template template))
       (smartchr-make-struct
        :cleanup-fn (lambda () (delete-char (- (length template))))
        :insert-fn (lambda () (insert template)))))))
