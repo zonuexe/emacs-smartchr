@@ -65,7 +65,7 @@
   (let* ((list-of-string (if (consp (car-safe list-of-string))
                              (car-safe list-of-string)
                            list-of-string))
-         (smartchr-structs (mapcar 'smartchr-parse list-of-string))
+         (smartchr-structs (mapcar #'smartchr-parse list-of-string))
          (last-struct nil)
          (count 0))
     (lambda ()
