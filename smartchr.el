@@ -99,7 +99,7 @@
        ((smartchr-make-struct
          :cleanup-fn (lambda ())
          :insert-fn (lambda ()))))))
-   ((string-match smartchr-template-cursor-re template)
+   ((string-match-p smartchr-template-cursor-re template)
     (cl-destructuring-bind (pre post) (save-match-data (split-string template smartchr-template-cursor-re))
       (let ((pre pre) (post post))
         (smartchr-make-struct
